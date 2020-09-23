@@ -1,27 +1,30 @@
-var fixedRect, movingRect;
-
+//const variables
+const Engine=Matter.Engine;
+const World=Matter.World;
+const Bodies=Matter.Bodies;
 function setup() {
-  createCanvas(1200,800);
-  fixedRect = createSprite(400,100, 80, 80);
-  fixedRect.shapeColor = "green";
-  fixedRect.debug = true;
-  movingRect = createSprite(400,800,80,30);
-  movingRect.shapeColor = "green";
-  movingRect.debug = true;
-  movingRect.velocityY = -5;
-  fixedRect.velocityY = 5;
+  var canvas=createCanvas(400,400);
+  engine=Engine.create();
+  world=engine.world;
+  var ground_options={
+    isStatic:true
+  }
+  var ball_options={
+    restitution:1.25
+  }
+  ground=Bodies.rectangle(200,390,200,20,ground_options);
+  World.add(world,ground);
+  ball=Bodies.circle(200,100,20, ball_options);
+  World.add(world,ball);
+  
 }
 
 function draw() {
-  background(0,0,0);
-  if(isTouching(movingRect,fixedRect)) {
-    movingRect.shapeColor = "red";
-    fixedRect.shapeColor = "red";
-  }
-  else{
-    movingRect.shapeColor = "green";
-    fixedRect.shapeColor = "green";
-  }    
-  //bounceOff(movingRect,fixedRect);//
+  background(0);
+  Engine.update(engine); 
+  rectMode(CENTER);
+  rect(ground.position.x,ground.position.y,50,50);
+  ellipseMode(RADIUS);
+  ellipse(ball.position.x, ball.position.y, 20, 20); 
   drawSprites();
 }
